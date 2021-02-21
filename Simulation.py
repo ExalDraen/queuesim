@@ -55,4 +55,12 @@ class Simulation:
         """
         Print current results of simulation
         """
-        print(self.scheduler.get_results())
+        outputs = self.scheduler.get_results()
+        total_compile_time = sum((x.compile_end - x.compile_start for x in outputs))
+        total_test_time = sum((x.test_end - x.test_start for x in outputs))
+        last_release = max((x.released_time for x in outputs))
+        print("\n\n*** RESULTS ***\n")
+        print(f"Last release at: {last_release}")
+        print(f"Total Compile time: {total_compile_time}")
+        print(f"Total Test time: {total_test_time}")
+        print(outputs)

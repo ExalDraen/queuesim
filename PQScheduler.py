@@ -26,8 +26,6 @@ class PQScheduler:
         # This scheduler runs changesets in parallel, but only releases from the front
         # This means that new changesets must contain all of the changes contained
         # in changesets that are already queued
-        # A simple model for this is to sum the compilation times (bigger changeset)
-        # but not the test time (we don't need to re-test changes)
         mod_cs = Changeset(
             changed_modules=set.union(cs.changed_modules, *(r.changeset.changed_modules for r in self.active_q))
         )

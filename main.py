@@ -9,6 +9,12 @@ from Simulation import Simulation
 
 logger = logging.getLogger(__name__)
 
+# TODO:
+# - split compilation modules from test modules so we can model that incremental
+#   changesets don't need to re-test
+# - failed releases and their consequence
+# - better output
+
 
 def main():
     setup_logging()
