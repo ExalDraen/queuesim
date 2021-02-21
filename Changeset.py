@@ -22,6 +22,7 @@ class Changeset:
     it would take to compile & test
     """
     changed_modules: set[Module]
+    modules_to_test: set[Module]
 
     @property
     def compile_duration(self) -> int:
@@ -29,4 +30,4 @@ class Changeset:
 
     @property
     def test_duration(self) -> int:
-        return sum(m.test_duration for m in self.changed_modules)
+        return sum(m.test_duration for m in self.modules_to_test)

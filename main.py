@@ -9,16 +9,13 @@ from Simulation import Simulation
 
 logger = logging.getLogger(__name__)
 
-# TODO:
-# - split compilation modules from test modules so we can model that incremental
-#   changesets don't need to re-test
-# - failed releases and their consequence
-# - better output
+# TODO: failed releases and their consequence
+# TODO: better output
 
 
 def main():
     setup_logging()
-    print("Starting Sim!")
+    print("Starting Simulation!")
 
     # Set up two random sources with identical contents
     src = RandomSource()

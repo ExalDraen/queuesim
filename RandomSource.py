@@ -36,7 +36,7 @@ class RandomSource:
         """
         Draw the change sets that have arrived at the given tick time
         :param tick: tick time used to draw sets
-        :return: the change sets that have deemed to have arrived at the given time
+        :return: the change sets that have been deemed to have arrived at the given time
         """
         return self.pool.pop(tick, [])
 
@@ -60,9 +60,12 @@ class RandomSource:
         # by arrival time
         for i in range(num):
             t = randrange(RandomSource.ARRIVAL_RANGE[0], RandomSource.ARRIVAL_RANGE[1])
+            # TODO: The test modules should be derived from the change modules
             c = Changeset(
                 changed_modules=self.draw_modules(
-                    random.randrange(RandomSource.MODULES_RANGE[0], RandomSource.MODULES_RANGE[1]))
+                    random.randrange(RandomSource.MODULES_RANGE[0], RandomSource.MODULES_RANGE[1])),
+                modules_to_test=self.draw_modules(
+                    random.randrange(RandomSource.MODULES_RANGE[0], RandomSource.MODULES_RANGE[1])),
             )
             pool[t].append(c)
 

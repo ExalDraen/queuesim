@@ -25,9 +25,9 @@ class SQScheduler:
         self.active_q.append(r)
 
     def process_tick(self, new_tick: int):
+        self.tick = new_tick
         if len(self.active_q) <= 0:
-            # Nothing in queue, nothing to do
-            logger.info("Active queue empty, nothing to do")
+            logger.debug("Processing requested, but queue empty, nothing to do")
             return
 
         # Only the release at the front gets to progress
@@ -39,7 +39,6 @@ class SQScheduler:
             current.mark_released(new_tick)
             self.done_q.append(self.active_q.popleft())
 
-        self.tick = new_tick
         logger.debug("Processed tick %s. Remaining active requests: %s, Done: %s",
                      new_tick, len(self.active_q), len(self.done_q))
 

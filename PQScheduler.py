@@ -25,18 +25,22 @@ class PQScheduler:
     def accept_changeset(self, cs: Changeset):
         # This scheduler runs changesets in parallel, but only releases from the front
         # This means that new changesets must contain all of the changes contained
-        # in changesets that are already queued
+        # in changesets that are already queued. Therefore, we need to compile the
+        # union of all the changed modules
+        # However, we don't need to union the tests modules as we only need to validate the
+        # new changes (previous changes were validated by previous changesets).
         mod_cs = Changeset(
-            changed_modules=set.union(cs.changed_modules, *(r.changeset.changed_modules for r in self.active_q))
+            changed_modules=set.union(cs.changed_modules, *(r.changeset.changed_modules for r in self.active_q)),
+            modules_to_test=cs.modules_to_test
         )
         logger.debug("Incoming changeset: %s, queued changeset: %s", cs, mod_cs)
         r = Release(name=f"R-{uuid.uuid4().hex}", changeset=mod_cs, queued_time=self.tick)
         self.active_q.append(r)
 
     def process_tick(self, new_tick: int):
+        self.tick = new_tick
         if len(self.active_q) <= 0:
-            # Nothing in queue, nothing to do - but we shouldn't get here!
-            logger.warning("Active queue empty but processing requested, skipping!")
+            logger.debug("Processing requested, but queue empty, nothing to do")
             return
 
         # All of the releases in the queue get to progress
@@ -50,7 +54,6 @@ class PQScheduler:
             current.mark_released(new_tick)
             self.done_q.append(self.active_q.popleft())
 
-        self.tick = new_tick
         logger.debug("Processed tick %s. Remaining active requests: %s, Done: %s",
                      new_tick, len(self.active_q), len(self.done_q))
 

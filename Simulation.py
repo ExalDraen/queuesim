@@ -5,6 +5,7 @@ from typing import Union
 
 from Changeset import Changeset
 from PQScheduler import PQScheduler
+from RandomSource import RandomSource
 from SQScheduler import SQScheduler
 
 logger = logging.getLogger(__name__)
@@ -13,7 +14,7 @@ logger = logging.getLogger(__name__)
 class Simulation:
     SLEEP_SECS: float = 0.0001
 
-    def __init__(self, source, scheduler: Union[SQScheduler, PQScheduler]):
+    def __init__(self, source: RandomSource, scheduler: Union[SQScheduler, PQScheduler]):
         self.tick: int = 0
         self.source = source  # Source of changesets
         self.scheduler = scheduler
@@ -59,7 +60,16 @@ class Simulation:
         total_compile_time = sum((x.compile_end - x.compile_start for x in outputs))
         total_test_time = sum((x.test_end - x.test_start for x in outputs))
         last_release = max((x.released_time for x in outputs))
-        print("\n\n*** RESULTS ***\n")
+        print(f"\n\n***** RESULTS  for {self.scheduler.__class__} *****\n")
+        print("*** INPUTS")
+        print(f"Arrival time range: {self.source.ARRIVAL_RANGE}")
+        print(f"Compile time range: {self.source.COMPILE_RANGE}")
+        print(f"Test time range: {self.source.TEST_RANGE}")
+        print(f"{self.source.NUM_MODULES_RANGE=}")
+        print(f"{self.source.MODULES_RANGE=}")
+        print(f"Total module pool size: {len(self.source.module_pool)}")
+
+        print("\n*** OUTPUTS")
         print(f"Last release at: {last_release}")
         print(f"Total Compile time: {total_compile_time}")
         print(f"Total Test time: {total_test_time}")
