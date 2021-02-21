@@ -1,8 +1,10 @@
 #  Copyright (c) 2021. Alexander Hermes
 import logging
 import time
+from typing import Union
 
 from Changeset import Changeset
+from PQScheduler import PQScheduler
 from SQScheduler import SQScheduler
 
 logger = logging.getLogger(__name__)
@@ -11,7 +13,7 @@ logger = logging.getLogger(__name__)
 class Simulation:
     SLEEP_SECS: float = 0.0001
 
-    def __init__(self, source, scheduler: SQScheduler):
+    def __init__(self, source, scheduler: Union[SQScheduler, PQScheduler]):
         self.tick: int = 0
         self.source = source  # Source of changesets
         self.scheduler = scheduler

@@ -31,10 +31,12 @@ class SQScheduler:
             return
 
         # Only the release at the front gets to progress
-        self.active_q[0].process_tick(new_tick)
+        current: Release = self.active_q[0]
+        current.process_tick(new_tick)
         # If active release complete, move to done queue
-        if self.active_q[0].complete():
-            logger.info("Release %s complete, moving to done list", self.active_q[0])
+        if self.active_q[0].is_done():
+            logger.info("Release %s complete, moving to done list", current)
+            current.mark_released(new_tick)
             self.done_q.append(self.active_q.popleft())
 
         self.tick = new_tick

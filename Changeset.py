@@ -10,4 +10,4 @@ class Changeset:
     """
     compile_duration: int
     test_duration: int
-    changed_modules: list[str]
+    changed_modules: set[str]

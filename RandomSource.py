@@ -12,9 +12,17 @@ class RandomSource:
     ARRIVAL_RANGE = (1, 720)
     COMPILE_RANGE = (60, 120)
     TEST_RANGE = (120, 360)
+    # Quick type for changeset drawing pool
+    Pool = dict[int, list[Changeset]]
 
-    def __init__(self, num: int):
+    def __init__(self):
+        self.pool = {}
+
+    def initialize(self, num: int):
         self.pool = self.gen_changesets(num)
+
+    def initialize_from_pool(self, pool: Pool):
+        self.pool = pool
 
     def draw(self, tick: int) -> list[Changeset]:
         """
@@ -31,7 +39,7 @@ class RandomSource:
         return len(self.pool) == 0
 
     @staticmethod
-    def gen_changesets(num: int) -> dict[int, list[Changeset]]:
+    def gen_changesets(num: int) -> Pool:
         """
         Randomly generate changesets and arrival times and return them
 
@@ -48,7 +56,7 @@ class RandomSource:
             c = Changeset(
                 compile_duration=randrange(RandomSource.COMPILE_RANGE[0], RandomSource.COMPILE_RANGE[1]),
                 test_duration=randrange(RandomSource.TEST_RANGE[0], RandomSource.TEST_RANGE[1]),
-                changed_modules=[]  # ignored for the time being
+                changed_modules=set()  # ignored for the time being
             )
             pool[t].append(c)
 
