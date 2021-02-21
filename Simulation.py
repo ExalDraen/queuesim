@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class Simulation:
-    SLEEP_SECS : float = 0.01
+    SLEEP_SECS: float = 0.0001
 
     def __init__(self, source, scheduler: SQScheduler):
         self.tick: int = 0

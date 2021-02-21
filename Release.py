@@ -43,15 +43,15 @@ class Release:
         # If we're waiting, start compilation
         if self.phase() == Phase.WAITING:
             self.compile_start = tick
-
         # If we're compiling, check if we're done with that
         # and can start testing
-        if self.phase() == Phase.COMPILING:
-            if self.compile_start + self.changeset.compile_duration >= tick:
+        elif self.phase() == Phase.COMPILING:
+            if tick >= self.compile_start + self.changeset.compile_duration:
                 self.compile_end = tick
                 self.test_start = tick
-
-        if self.phase() == Phase.TESTING:
-            if self.test_start + self.changeset.test_duration >= tick:
+        # And if we're testing, see if we're done with that and can
+        # declare victory
+        elif self.phase() == Phase.TESTING:
+            if tick >= self.test_start + self.changeset.test_duration:
                 self.test_end = tick
                 self.completed_time = tick
