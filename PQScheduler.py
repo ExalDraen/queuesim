@@ -29,8 +29,6 @@ class PQScheduler:
         # A simple model for this is to sum the compilation times (bigger changeset)
         # but not the test time (we don't need to re-test changes)
         mod_cs = Changeset(
-            compile_duration=cs.compile_duration + sum((r.changeset.compile_duration for r in self.active_q)),
-            test_duration=cs.test_duration,
             changed_modules=set.union(cs.changed_modules, *(r.changeset.changed_modules for r in self.active_q))
         )
         logger.debug("Incoming changeset: %s, queued changeset: %s", cs, mod_cs)

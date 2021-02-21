@@ -18,7 +18,7 @@ def main():
     src = RandomSource()
     src.initialize(10)
     cloned_src = RandomSource()
-    cloned_src.initialize_from_pool(deepcopy(src.pool))
+    cloned_src.initialize_from(deepcopy(src.pool))
 
     print("Simulating single threaded queue")
     sq = SQScheduler()

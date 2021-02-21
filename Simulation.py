@@ -24,7 +24,7 @@ class Simulation:
         """
         while not self.is_complete():
             self.advance()
-            time.sleep(Simulation.SLEEP_SECS)
+            # time.sleep(Simulation.SLEEP_SECS)
 
     def advance(self):
         """
